@@ -24,25 +24,23 @@ document.addEventListener("DOMContentLoaded", () => {
       if (!trigger) return;
 
       const service = trigger.getAttribute("data-service") || "услуге";
-      const price = trigger.getAttribute("data-price") || "";
-      const targetHref = trigger.getAttribute("data-lead-href") || "contacts.html";
 
       const titleNode = requestModal.querySelector("[data-request-title]");
-      const textNode = requestModal.querySelector("[data-request-text]");
-      const buttonNode = requestModal.querySelector("[data-request-link]");
+      const sourceNode = requestModal.querySelector("[data-request-source]");
+      const captchaImage = requestModal.querySelector(".captcha-image");
 
       if (titleNode) {
-        titleNode.textContent = service;
+        titleNode.textContent = `${service} — заявка`;
       }
 
-      if (textNode) {
-        textNode.textContent = price
-          ? `Ориентир по стоимости: ${price}. Оставьте заявку, и мы уточним задачу и подготовим предложение.`
-          : "Оставьте заявку, и мы уточним задачу и подготовим предложение.";
+      if (sourceNode) {
+        sourceNode.value = `Модальное окно: ${service}`;
       }
 
-      if (buttonNode) {
-        buttonNode.setAttribute("href", targetHref);
+      if (captchaImage) {
+        const baseUrl = captchaImage.getAttribute("data-base-src") || captchaImage.getAttribute("src") || "captcha.php";
+        captchaImage.setAttribute("data-base-src", baseUrl);
+        captchaImage.src = `${baseUrl}${baseUrl.includes("?") ? "&" : "?"}t=${Date.now()}`;
       }
     });
   }

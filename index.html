@@ -177,12 +177,35 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
         </div>
         <div class="modal-body">
-          <p class="mb-3" data-request-text>Оставьте заявку, и мы уточним задачу и подготовим предложение.</p>
-          <p class="mb-2"><strong>Телефон:</strong> <a href="tel:+79296760098">+7 (929) 676-00-98</a></p>
-          <p class="mb-0 text-muted">Можно сразу перейти к форме ниже и отправить заявку с сайта.</p>
-        </div>
-        <div class="modal-footer">
-          <a class="btn btn-accent" data-request-link href="#contact-form" data-bs-dismiss="modal">Перейти к заявке</a>
+          <p class="mb-3">Оставьте заявку и получите точный расчет по вашей задаче.</p>
+          <form action="send.php" method="post">
+            <input type="hidden" name="form_source" value="Модальное окно: Главная" data-request-source>
+            <input type="text" name="website" class="d-none" tabindex="-1" autocomplete="off">
+            <div class="row g-3">
+              <div class="col-md-6"><input class="form-control" name="name" type="text" placeholder="Ваше имя" required></div>
+              <div class="col-md-6"><input class="form-control" name="phone" type="tel" placeholder="Телефон *" required></div>
+              <div class="col-12"><input class="form-control" name="email" type="email" placeholder="Email"></div>
+              <div class="col-12"><textarea class="form-control" name="comment" rows="4" placeholder="Опишите задачу"></textarea></div>
+              <div class="col-12">
+                <div class="captcha-box">
+                  <div class="captcha-row">
+                    <img class="captcha-image" id="request-captcha-image-home" src="captcha.php" data-base-src="captcha.php" alt="CAPTCHA">
+                    <button class="btn btn-outline-secondary" type="button" data-captcha-refresh data-captcha-target="request-captcha-image-home">Обновить код</button>
+                  </div>
+                </div>
+              </div>
+              <div class="col-12"><input class="form-control" name="captcha" type="text" placeholder="Введите код с картинки" required></div>
+              <div class="col-12">
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" id="consent-request-home" name="consent" value="yes" required>
+                  <label class="form-check-label" for="consent-request-home">Я ознакомлен с информированным <a href="index.html">согласием</a> и согласен на обработку данных.</label>
+                </div>
+              </div>
+              <div class="col-12 d-flex justify-content-end">
+                <button class="btn btn-accent" type="submit">Получить точный расчет</button>
+              </div>
+            </div>
+          </form>
         </div>
       </div>
     </div>
