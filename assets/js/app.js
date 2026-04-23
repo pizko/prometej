@@ -47,40 +47,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const galleryRoot = document.getElementById("gallery-grid");
   if (galleryRoot && window.bootstrap) {
-    const fallbackGallery = [
-      "photo/gallery-1.jpg",
-      "photo/gallery-2.jpg",
-      "photo/gallery-3.jpg",
-      "photo/gallery-4.jpg",
-      "photo/gallery-5.jpg",
-      "photo/gallery-6.jpg",
-      "photo/gallery-7.jpg",
-      "photo/gallery-8.jpg",
-      "photo/gallery-9.jpg",
-      "photo/gallery-10.jpg",
-      "photo/gallery-11.jpg",
-      "photo/gallery-12.jpg",
-      "photo/gallery-13.jpg",
-      "photo/gallery-14.jpg",
-    ];
-
-    const captions = [
-      "Монтаж и примеры объектов",
-      "Видеонаблюдение и доступ",
-      "Реальные рабочие кейсы",
-      "Установка оборудования",
-      "Домофония и входные группы",
-      "Сервис и сопровождение",
-      "Пожарная безопасность и монтаж",
-      "Настройка камер и точек обзора",
-      "СКУД и инженерная часть",
-      "Рабочие выезды на объекты",
-      "Интеграция оборудования",
-      "Примеры завершенных работ",
-      "Сложные узлы и установка",
-      "Финальный вид на объекте",
-    ];
-
     const lightboxElement = document.getElementById("galleryLightbox");
     const lightboxImage = document.getElementById("galleryLightboxImage");
     const lightboxCaption = document.getElementById("galleryLightboxCaption");
@@ -139,31 +105,25 @@ document.addEventListener("DOMContentLoaded", () => {
       if (event.key === "ArrowRight") move(1);
     });
 
-    fetch("https://api.github.com/repos/pizko/prometej/contents/photo")
+    fetch("photo/photos.json")
       .then((response) => {
         if (!response.ok) {
-          throw new Error("GitHub API unavailable");
+          throw new Error("Photos JSON unavailable");
         }
         return response.json();
       })
       .then((items) => {
-        const remoteImages = items
-          .filter((item) => item.type === "file" && /\.(png|jpe?g|webp|gif)$/i.test(item.name))
-          .sort((a, b) => a.name.localeCompare(b.name, "ru", { numeric: true }))
-          .map((item, index) => ({
-            src: `photo/${item.name}`,
-            caption: captions[index] || `Фото ${index + 1}`,
-          }));
-
-        renderGallery(remoteImages);
+        renderGallery(
+          items.filter(
+            (item) =>
+              typeof item?.src === "string" &&
+              item.src &&
+              /\.(png|jpe?g|webp|gif)$/i.test(item.src)
+          )
+        );
       })
       .catch(() => {
-        renderGallery(
-          fallbackGallery.map((src, index) => ({
-            src,
-            caption: captions[index] || `Фото ${index + 1}`,
-          }))
-        );
+        galleryRoot.innerHTML = '<div class="gallery-empty">Не удалось загрузить список фотографий.</div>';
       });
   }
 });
