@@ -105,22 +105,51 @@ document.addEventListener("DOMContentLoaded", () => {
       if (event.key === "ArrowRight") move(1);
     });
 
-    fetch("photo/photos.json")
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Photos JSON unavailable");
-        }
-        return response.json();
-      })
-      .then((items) => {
-        renderGallery(
-          items.filter(
-            (item) =>
-              typeof item?.src === "string" &&
-              item.src &&
-              /\.(png|jpe?g|webp|gif)$/i.test(item.src)
-          )
-        );
+    const normalizeCaption = (fileName) =>
+      fileName
+        .replace(/\.[^.]+$/, "")
+        .replace(/[-_]+/g, " ")
+        .replace(/\s+/g, " ")
+        .trim();
+
+    Promise.all([
+      fetch("photo/photos.json")
+        .then((response) => (response.ok ? response.json() : []))
+        .catch(() => []),
+      fetch("https://api.github.com/repos/pizko/prometej/contents/photo")
+        .then((response) => (response.ok ? response.json() : []))
+        .catch(() => []),
+    ])
+      .then(([manifestItems, githubItems]) => {
+        const manifestMap = new Map();
+        const ordered = [];
+
+        manifestItems.forEach((item) => {
+          if (!item || typeof item.src !== "string" || !/\.(png|jpe?g|webp|gif)$/i.test(item.src)) {
+            return;
+          }
+          manifestMap.set(item.src, item);
+          ordered.push({
+            src: item.src,
+            caption: item.caption || normalizeCaption(item.src.split("/").pop() || item.src),
+          });
+        });
+
+        githubItems
+          .filter((item) => item.type === "file" && /\.(png|jpe?g|webp|gif)$/i.test(item.name))
+          .sort((a, b) => a.name.localeCompare(b.name, "ru", { numeric: true }))
+          .forEach((item) => {
+            const src = `photo/${item.name}`;
+            if (manifestMap.has(src)) {
+              return;
+            }
+            ordered.push({
+              src,
+              caption: normalizeCaption(item.name),
+            });
+          });
+
+        renderGallery(ordered);
       })
       .catch(() => {
         galleryRoot.innerHTML = '<div class="gallery-empty">Не удалось загрузить список фотографий.</div>';
