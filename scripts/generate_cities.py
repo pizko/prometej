@@ -10,6 +10,24 @@ DATA_PATH = ROOT / "data" / "cities.json"
 CITIES_DIR = ROOT / "cities"
 
 
+def build_nav(prefix: str, active: str = "") -> str:
+    items = [
+        ("Главная", f"{prefix}index.html", active == "home"),
+        ("О нас", f"{prefix}about.html", active == "about"),
+        ("Услуги", f"{prefix}services.html", active == "services"),
+        ("Контакты", f"{prefix}contacts.html", active == "contacts"),
+        ("Галерея", f"{prefix}gallery.html", active == "gallery"),
+        ("Продукция", f"{prefix}products.html", active == "products"),
+        ("Цены", f"{prefix}prices.html", active == "prices"),
+        ("Блог", f"{prefix}blog.html", active == "blog"),
+        ("Города", f"{prefix}cities/index.html" if prefix else "cities/index.html", active == "cities"),
+    ]
+    return "\n".join(
+        f'              <li class="nav-item"><a class="nav-link{" active" if is_active else ""}" href="{href}">{label}</a></li>'
+        for label, href, is_active in items
+    )
+
+
 def build_city_page(item: dict) -> str:
     city = escape(item["city"])
     title = escape(item["title"])
@@ -21,7 +39,7 @@ def build_city_page(item: dict) -> str:
         f"            <li>{escape(point)}</li>" for point in item["service_points"]
     )
     faq_blocks = "\n".join(
-        f"""        <article class="service-card"><div class="card-body"><h3>{escape(faq["question"])}</h3><p>{escape(faq["answer"])}</p></div></article>"""
+        f"""          <div class="col-md-6"><article class="service-card"><div class="card-body"><h3>{escape(faq["question"])}</h3><p>{escape(faq["answer"])}</p></div></article></div>"""
         for faq in item["faq"]
     )
 
@@ -55,15 +73,7 @@ def build_city_page(item: dict) -> str:
         </button>
         <div class="collapse navbar-collapse justify-content-end" id="mainNav">
           <ul class="navbar-nav align-items-xl-center gap-xl-1">
-              <li class="nav-item"><a class="nav-link" href="../../index.html">Главная</a></li>
-              <li class="nav-item"><a class="nav-link" href="../../about.html">О нас</a></li>
-              <li class="nav-item"><a class="nav-link" href="../../services.html">Услуги</a></li>
-              <li class="nav-item"><a class="nav-link" href="../../contacts.html">Контакты</a></li>
-              <li class="nav-item"><a class="nav-link" href="../../gallery.html">Галерея</a></li>
-              <li class="nav-item"><a class="nav-link" href="../../products.html">Продукция</a></li>
-              <li class="nav-item"><a class="nav-link" href="../../prices.html">Цены</a></li>
-              <li class="nav-item"><a class="nav-link" href="../../blog.html">Блог</a></li>
-              <li class="nav-item"><a class="nav-link active" href="../index.html">Города</a></li>
+{build_nav("../../", "cities")}
           </ul>
         </div>
       </div>
@@ -71,10 +81,42 @@ def build_city_page(item: dict) -> str:
   </header>
 
   <main>
-    <section class="page-hero">
+    <section class="hero">
       <div class="container">
-        <h1 class="section-title text-white">{title}</h1>
-        <p>{hero_intro}</p>
+        <div class="row align-items-center g-4">
+          <div class="col-lg-7">
+            <h1 class="hero-title">{title}</h1>
+            <p class="hero-lead">{hero_intro}</p>
+            <div class="hero-actions">
+              <a class="btn btn-accent btn-lg px-4" href="#city-contact-form">Получить расчет</a>
+              <a class="btn btn-outline-light btn-lg px-4" href="../../services.html">Посмотреть услуги</a>
+            </div>
+            <div class="hero-features">
+              <div class="hero-feature"><img src="../../assets/images/icon-support.webp" alt=""><div><strong>Работа по городу {city}</strong><small>Под объект и его сценарии</small></div></div>
+              <div class="hero-feature"><img src="../../assets/images/icon-monitoring.webp" alt=""><div><strong>Удаленный контроль</strong><small>Камеры, доступ, уведомления</small></div></div>
+              <div class="hero-feature"><img src="../../assets/images/icon-book.webp" alt=""><div><strong>Понятная передача</strong><small>Без хаоса после монтажа</small></div></div>
+            </div>
+          </div>
+          <div class="col-lg-5">
+            <div class="hero-visual">
+              <div class="hero-orb"></div>
+              <div class="hero-card">
+                <img src="../../assets/images/robot.webp" alt="Прометей01 в {city}">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section-tight">
+      <div class="container">
+        <div class="metric-strip">
+          <article class="metric-card"><span class="metric-value">15+</span><div>лет в сфере безопасности</div></article>
+          <article class="metric-card"><span class="metric-value">300+</span><div>объектов в работе и на сервисе</div></article>
+          <article class="metric-card"><span class="metric-value">24/7</span><div>поддержка и сопровождение</div></article>
+          <article class="metric-card"><span class="metric-value">{city}</span><div>локальная страница под поиск</div></article>
+        </div>
       </div>
     </section>
 
@@ -84,7 +126,7 @@ def build_city_page(item: dict) -> str:
           <div class="col-lg-7">
             <div class="surface-card">
               <div class="section-kicker">Как мы работаем</div>
-              <h2 class="section-title">Решения по безопасности для города {city}</h2>
+              <h2 class="section-title">Решения по безопасности для {city}</h2>
               <p class="section-copy">{lead}</p>
               <ul class="list-check">
 {service_points}
@@ -105,16 +147,14 @@ def build_city_page(item: dict) -> str:
         <div class="section-kicker">FAQ</div>
         <h2 class="section-title">Частые вопросы по {city}</h2>
         <div class="row g-4">
-          <div class="col-md-6">
 {faq_blocks}
-          </div>
         </div>
       </div>
     </section>
 
     <section class="section">
       <div class="container">
-        <div class="form-shell">
+        <div class="form-shell" id="city-contact-form">
           <div class="row g-4 align-items-start">
             <div class="col-lg-5">
               <div class="section-kicker text-white-50">Заявка</div>
@@ -174,7 +214,7 @@ def build_city_page(item: dict) -> str:
 
 def build_cities_index(items: list[dict]) -> str:
     cards = "\n".join(
-        f"""      <div class="col-md-6 col-xl-4"><article class="service-card"><div class="card-body"><h3>{escape(item["city"])}</h3><p>{escape(item["description"])}</p><a class="btn btn-outline-dark" href="{escape(item["slug"])}/">Открыть страницу</a></div></article></div>"""
+        f"""          <div class="col-md-6 col-xl-3"><article class="service-card"><div class="card-body"><h3>{escape(item["city"])}</h3><p>{escape(item["description"])}</p><a class="btn btn-outline-dark" href="{escape(item["slug"])}/">Открыть страницу</a></div></article></div>"""
         for item in items
     )
 
@@ -208,15 +248,7 @@ def build_cities_index(items: list[dict]) -> str:
         </button>
         <div class="collapse navbar-collapse justify-content-end" id="mainNav">
           <ul class="navbar-nav align-items-xl-center gap-xl-1">
-              <li class="nav-item"><a class="nav-link" href="../index.html">Главная</a></li>
-              <li class="nav-item"><a class="nav-link" href="../about.html">О нас</a></li>
-              <li class="nav-item"><a class="nav-link" href="../services.html">Услуги</a></li>
-              <li class="nav-item"><a class="nav-link" href="../contacts.html">Контакты</a></li>
-              <li class="nav-item"><a class="nav-link" href="../gallery.html">Галерея</a></li>
-              <li class="nav-item"><a class="nav-link" href="../products.html">Продукция</a></li>
-              <li class="nav-item"><a class="nav-link" href="../prices.html">Цены</a></li>
-              <li class="nav-item"><a class="nav-link" href="../blog.html">Блог</a></li>
-              <li class="nav-item"><a class="nav-link active" href="index.html">Города</a></li>
+{build_nav("../", "cities")}
           </ul>
         </div>
       </div>
@@ -224,14 +256,46 @@ def build_cities_index(items: list[dict]) -> str:
   </header>
 
   <main>
-    <section class="page-hero">
+    <section class="hero">
       <div class="container">
-        <h1 class="section-title text-white">Города</h1>
-        <p>Основа под локальные страницы для поискового трафика. Здесь будут собираться отдельные страницы по городам и направлениям работ.</p>
+        <div class="row align-items-center g-4">
+          <div class="col-lg-7">
+            <h1 class="hero-title">Городские страницы <span>под локальный поиск</span></h1>
+            <p class="hero-lead">Раздел, в котором можно масштабировать сайт по городам без ручной верстки каждой страницы. Для каждого города можно задавать уникальный title, description, вводный текст, FAQ и формулировки под локальные запросы.</p>
+            <div class="hero-actions">
+              <a class="btn btn-accent btn-lg px-4" href="#cities-grid">Смотреть города</a>
+              <a class="btn btn-outline-light btn-lg px-4" href="../index.html">На главную</a>
+            </div>
+            <div class="hero-features">
+              <div class="hero-feature"><img src="../assets/images/icon-support.webp" alt=""><div><strong>Масштабирование</strong><small>Один шаблон на много городов</small></div></div>
+              <div class="hero-feature"><img src="../assets/images/icon-monitoring.webp" alt=""><div><strong>Контроль структуры</strong><small>Через JSON и генератор</small></div></div>
+              <div class="hero-feature"><img src="../assets/images/icon-book.webp" alt=""><div><strong>SEO-основа</strong><small>Под локальные посадочные страницы</small></div></div>
+            </div>
+          </div>
+          <div class="col-lg-5">
+            <div class="hero-visual">
+              <div class="hero-orb"></div>
+              <div class="hero-card">
+                <img src="../assets/images/robot.webp" alt="Прометей01">
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
 
-    <section class="section">
+    <section class="section-tight">
+      <div class="container">
+        <div class="metric-strip">
+          <article class="metric-card"><span class="metric-value">{len(items)}</span><div>городов уже в шаблоне</div></article>
+          <article class="metric-card"><span class="metric-value">JSON</span><div>данные в одном месте</div></article>
+          <article class="metric-card"><span class="metric-value">1</span><div>генератор статических страниц</div></article>
+          <article class="metric-card"><span class="metric-value">SEO</span><div>основа под локальные посадки</div></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="cities-grid">
       <div class="container">
         <div class="row g-4">
 {cards}

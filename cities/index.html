@@ -36,7 +36,7 @@
               <li class="nav-item"><a class="nav-link" href="../products.html">Продукция</a></li>
               <li class="nav-item"><a class="nav-link" href="../prices.html">Цены</a></li>
               <li class="nav-item"><a class="nav-link" href="../blog.html">Блог</a></li>
-              <li class="nav-item"><a class="nav-link active" href="index.html">Города</a></li>
+              <li class="nav-item"><a class="nav-link active" href="../cities/index.html">Города</a></li>
           </ul>
         </div>
       </div>
@@ -44,20 +44,52 @@
   </header>
 
   <main>
-    <section class="page-hero">
+    <section class="hero">
       <div class="container">
-        <h1 class="section-title text-white">Города</h1>
-        <p>Основа под локальные страницы для поискового трафика. Здесь будут собираться отдельные страницы по городам и направлениям работ.</p>
+        <div class="row align-items-center g-4">
+          <div class="col-lg-7">
+            <h1 class="hero-title">Городские страницы <span>под локальный поиск</span></h1>
+            <p class="hero-lead">Раздел, в котором можно масштабировать сайт по городам без ручной верстки каждой страницы. Для каждого города можно задавать уникальный title, description, вводный текст, FAQ и формулировки под локальные запросы.</p>
+            <div class="hero-actions">
+              <a class="btn btn-accent btn-lg px-4" href="#cities-grid">Смотреть города</a>
+              <a class="btn btn-outline-light btn-lg px-4" href="../index.html">На главную</a>
+            </div>
+            <div class="hero-features">
+              <div class="hero-feature"><img src="../assets/images/icon-support.webp" alt=""><div><strong>Масштабирование</strong><small>Один шаблон на много городов</small></div></div>
+              <div class="hero-feature"><img src="../assets/images/icon-monitoring.webp" alt=""><div><strong>Контроль структуры</strong><small>Через JSON и генератор</small></div></div>
+              <div class="hero-feature"><img src="../assets/images/icon-book.webp" alt=""><div><strong>SEO-основа</strong><small>Под локальные посадочные страницы</small></div></div>
+            </div>
+          </div>
+          <div class="col-lg-5">
+            <div class="hero-visual">
+              <div class="hero-orb"></div>
+              <div class="hero-card">
+                <img src="../assets/images/robot.webp" alt="Прометей01">
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
 
-    <section class="section">
+    <section class="section-tight">
+      <div class="container">
+        <div class="metric-strip">
+          <article class="metric-card"><span class="metric-value">4</span><div>городов уже в шаблоне</div></article>
+          <article class="metric-card"><span class="metric-value">JSON</span><div>данные в одном месте</div></article>
+          <article class="metric-card"><span class="metric-value">1</span><div>генератор статических страниц</div></article>
+          <article class="metric-card"><span class="metric-value">SEO</span><div>основа под локальные посадки</div></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="cities-grid">
       <div class="container">
         <div class="row g-4">
-      <div class="col-md-6 col-xl-4"><article class="service-card"><div class="card-body"><h3>Краснодар</h3><p>Прометей01: монтаж видеонаблюдения, домофонов, СКУД и сигнализации в Краснодаре.</p><a class="btn btn-outline-dark" href="krasnodar/">Открыть страницу</a></div></article></div>
-      <div class="col-md-6 col-xl-4"><article class="service-card"><div class="card-body"><h3>Сочи</h3><p>Прометей01: видеонаблюдение, домофоны, СКУД и сигнализация в Сочи.</p><a class="btn btn-outline-dark" href="sochi/">Открыть страницу</a></div></article></div>
-      <div class="col-md-6 col-xl-4"><article class="service-card"><div class="card-body"><h3>Мурманск</h3><p>Прометей01: монтаж и обслуживание систем безопасности в Мурманске.</p><a class="btn btn-outline-dark" href="murmansk/">Открыть страницу</a></div></article></div>
-      <div class="col-md-6 col-xl-4"><article class="service-card"><div class="card-body"><h3>Санкт-Петербург</h3><p>Прометей01: видеонаблюдение, домофоны, СКУД и охранные системы в Санкт-Петербурге.</p><a class="btn btn-outline-dark" href="sankt-peterburg/">Открыть страницу</a></div></article></div>
+          <div class="col-md-6 col-xl-3"><article class="service-card"><div class="card-body"><h3>Краснодар</h3><p>Прометей01: монтаж видеонаблюдения, домофонов, СКУД и сигнализации в Краснодаре.</p><a class="btn btn-outline-dark" href="krasnodar/">Открыть страницу</a></div></article></div>
+          <div class="col-md-6 col-xl-3"><article class="service-card"><div class="card-body"><h3>Сочи</h3><p>Прометей01: видеонаблюдение, домофоны, СКУД и сигнализация в Сочи.</p><a class="btn btn-outline-dark" href="sochi/">Открыть страницу</a></div></article></div>
+          <div class="col-md-6 col-xl-3"><article class="service-card"><div class="card-body"><h3>Мурманск</h3><p>Прометей01: монтаж и обслуживание систем безопасности в Мурманске.</p><a class="btn btn-outline-dark" href="murmansk/">Открыть страницу</a></div></article></div>
+          <div class="col-md-6 col-xl-3"><article class="service-card"><div class="card-body"><h3>Санкт-Петербург</h3><p>Прометей01: видеонаблюдение, домофоны, СКУД и охранные системы в Санкт-Петербурге.</p><a class="btn btn-outline-dark" href="sankt-peterburg/">Открыть страницу</a></div></article></div>
         </div>
       </div>
     </section>
