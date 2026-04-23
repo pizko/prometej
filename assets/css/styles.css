@@ -83,7 +83,7 @@ a {
   display: grid;
   place-items: center;
   font-weight: 800;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.04em;
   color: #fff;
   background: linear-gradient(145deg, var(--accent), #ff6469);
 }
@@ -346,14 +346,15 @@ a {
 }
 
 .price-tag {
-  display: inline-flex;
-  align-items: center;
+  display: inline-block;
   margin-top: 1rem;
-  padding: 0.55rem 0.95rem;
-  border-radius: 999px;
-  background: rgba(223,31,38,0.08);
+  padding: 0;
+  border-radius: 0;
+  background: transparent;
   color: var(--accent);
   font-weight: 700;
+  border: 0;
+  box-shadow: none;
 }
 
 .gallery-grid {
@@ -499,6 +500,10 @@ a {
   .hero {
     padding-top: 4rem;
     padding-bottom: 3.5rem;
+  }
+
+  .hero-card {
+    display: none;
   }
 
   .hero-features,
