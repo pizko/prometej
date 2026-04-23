@@ -45,7 +45,6 @@
   <main>
     <section class="page-hero">
       <div class="container">
-        <div class="section-kicker">Прометей01</div>
         <h1 class="section-title text-white">Цены</h1>
       </div>
     </section>
@@ -54,14 +53,33 @@
 <section class="section">
   <div class="container">
     <div class="row g-4">
-      <div class="col-md-6 col-xl-4"><article class="price-card"><div class="card-body"><h3>Домофоны</h3><p>Установка, настройка, замена оборудования.</p><div class="price-tag">от 3 500 ₽</div></div></article></div>
-      <div class="col-md-6 col-xl-4"><article class="price-card"><div class="card-body"><h3>Видеонаблюдение</h3><p>Монтаж и запуск типовых решений для квартиры, дома или офиса.</p><div class="price-tag">от 3 500 ₽</div></div></article></div>
-      <div class="col-md-6 col-xl-4"><article class="price-card"><div class="card-body"><h3>СКУД и сигнализация</h3><p>Подбор оборудования, монтаж и сопровождение по задаче объекта.</p><div class="price-tag">по запросу</div></div></article></div>
+      <div class="col-md-6 col-xl-4"><article class="price-card"><div class="card-body"><h3>Домофоны</h3><p>Установка, настройка, замена оборудования.</p><button class="price-tag" type="button" data-bs-toggle="modal" data-bs-target="#requestModal" data-service="Домофоны" data-price="от 3 500 ₽" data-lead-href="contacts.html">от 3 500 ₽</button></div></article></div>
+      <div class="col-md-6 col-xl-4"><article class="price-card"><div class="card-body"><h3>Видеонаблюдение</h3><p>Монтаж и запуск типовых решений для квартиры, дома или офиса.</p><button class="price-tag" type="button" data-bs-toggle="modal" data-bs-target="#requestModal" data-service="Видеонаблюдение" data-price="от 3 500 ₽" data-lead-href="contacts.html">от 3 500 ₽</button></div></article></div>
+      <div class="col-md-6 col-xl-4"><article class="price-card"><div class="card-body"><h3>СКУД и сигнализация</h3><p>Подбор оборудования, монтаж и сопровождение по задаче объекта.</p><button class="price-tag" type="button" data-bs-toggle="modal" data-bs-target="#requestModal" data-service="СКУД и сигнализация" data-price="по запросу" data-lead-href="contacts.html">по запросу</button></div></article></div>
     </div>
   </div>
 </section>
 
   </main>
+
+  <div class="modal fade" id="requestModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2 class="modal-title fs-4 mb-0" data-request-title>Оставить заявку</h2>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+        </div>
+        <div class="modal-body">
+          <p class="mb-3" data-request-text>Оставьте заявку, и мы уточним задачу и подготовим предложение.</p>
+          <p class="mb-2"><strong>Телефон:</strong> <a href="tel:+79296760098">+7 (929) 676-00-98</a></p>
+          <p class="mb-0 text-muted">Можно сразу перейти на страницу контактов и оставить заявку.</p>
+        </div>
+        <div class="modal-footer">
+          <a class="btn btn-accent" data-request-link href="contacts.html" data-bs-dismiss="modal">Оставить заявку</a>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <footer class="footer">
     <div class="container d-flex flex-column flex-md-row justify-content-between gap-2">

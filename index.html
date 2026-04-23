@@ -85,12 +85,12 @@
 <section class="section">
   <div class="container">
     <div class="row g-4">
-      <div class="col-md-6 col-xl-4"><article class="service-card"><div class="card-body"><h3>Домофоны</h3><p>Установка, модернизация и обслуживание домофонных систем для подъездов, домов и офисов.</p><div class="price-tag">от 3 500 ₽</div></div></article></div>
-      <div class="col-md-6 col-xl-4"><article class="service-card"><div class="card-body"><h3>Системы оповещения</h3><p>Решения для производственных, коммерческих и общественных объектов с понятной логикой эксплуатации.</p><div class="price-tag">от 3 500 ₽</div></div></article></div>
-      <div class="col-md-6 col-xl-4"><article class="service-card"><div class="card-body"><h3>Видеонаблюдение</h3><p>IP и гибридные решения с удалённым доступом, архивом событий и масштабируемой архитектурой.</p><div class="price-tag">от 3 500 ₽</div></div></article></div>
-      <div class="col-md-6 col-xl-4"><article class="service-card"><div class="card-body"><h3>Сигнализация</h3><p>Охранные комплексы с датчиками, сиренами и управлением со смартфона или пульта.</p><div class="price-tag">от 3 500 ₽</div></div></article></div>
-      <div class="col-md-6 col-xl-4"><article class="service-card"><div class="card-body"><h3>СКУД</h3><p>Контроллеры, считыватели, турникеты и интеграция в общую инфраструктуру объекта.</p><div class="price-tag">от 3 500 ₽</div></div></article></div>
-      <div class="col-md-6 col-xl-4"><article class="service-card"><div class="card-body"><h3>Пожарная безопасность</h3><p>Сигнализация, оповещение и проектирование под реальные требования помещения и эксплуатации.</p><div class="price-tag">по запросу</div></div></article></div>
+      <div class="col-md-6 col-xl-4"><article class="service-card"><div class="card-body"><h3>Домофоны</h3><p>Установка, модернизация и обслуживание домофонных систем для подъездов, домов и офисов.</p><button class="price-tag" type="button" data-bs-toggle="modal" data-bs-target="#requestModal" data-service="Домофоны" data-price="от 3 500 ₽" data-lead-href="#contact-form">от 3 500 ₽</button></div></article></div>
+      <div class="col-md-6 col-xl-4"><article class="service-card"><div class="card-body"><h3>Системы оповещения</h3><p>Решения для производственных, коммерческих и общественных объектов с понятной логикой эксплуатации.</p><button class="price-tag" type="button" data-bs-toggle="modal" data-bs-target="#requestModal" data-service="Системы оповещения" data-price="от 3 500 ₽" data-lead-href="#contact-form">от 3 500 ₽</button></div></article></div>
+      <div class="col-md-6 col-xl-4"><article class="service-card"><div class="card-body"><h3>Видеонаблюдение</h3><p>IP и гибридные решения с удалённым доступом, архивом событий и масштабируемой архитектурой.</p><button class="price-tag" type="button" data-bs-toggle="modal" data-bs-target="#requestModal" data-service="Видеонаблюдение" data-price="от 3 500 ₽" data-lead-href="#contact-form">от 3 500 ₽</button></div></article></div>
+      <div class="col-md-6 col-xl-4"><article class="service-card"><div class="card-body"><h3>Сигнализация</h3><p>Охранные комплексы с датчиками, сиренами и управлением со смартфона или пульта.</p><button class="price-tag" type="button" data-bs-toggle="modal" data-bs-target="#requestModal" data-service="Сигнализация" data-price="от 3 500 ₽" data-lead-href="#contact-form">от 3 500 ₽</button></div></article></div>
+      <div class="col-md-6 col-xl-4"><article class="service-card"><div class="card-body"><h3>СКУД</h3><p>Контроллеры, считыватели, турникеты и интеграция в общую инфраструктуру объекта.</p><button class="price-tag" type="button" data-bs-toggle="modal" data-bs-target="#requestModal" data-service="СКУД" data-price="от 3 500 ₽" data-lead-href="#contact-form">от 3 500 ₽</button></div></article></div>
+      <div class="col-md-6 col-xl-4"><article class="service-card"><div class="card-body"><h3>Пожарная безопасность</h3><p>Сигнализация, оповещение и проектирование под реальные требования помещения и эксплуатации.</p><button class="price-tag" type="button" data-bs-toggle="modal" data-bs-target="#requestModal" data-service="Пожарная безопасность" data-price="по запросу" data-lead-href="#contact-form">по запросу</button></div></article></div>
     </div>
   </div>
 </section>
@@ -168,6 +168,25 @@
 </section>
 
   </main>
+
+  <div class="modal fade" id="requestModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2 class="modal-title fs-4 mb-0" data-request-title>Оставить заявку</h2>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+        </div>
+        <div class="modal-body">
+          <p class="mb-3" data-request-text>Оставьте заявку, и мы уточним задачу и подготовим предложение.</p>
+          <p class="mb-2"><strong>Телефон:</strong> <a href="tel:+79296760098">+7 (929) 676-00-98</a></p>
+          <p class="mb-0 text-muted">Можно сразу перейти к форме ниже и отправить заявку с сайта.</p>
+        </div>
+        <div class="modal-footer">
+          <a class="btn btn-accent" data-request-link href="#contact-form" data-bs-dismiss="modal">Перейти к заявке</a>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <footer class="footer">
     <div class="container d-flex flex-column flex-md-row justify-content-between gap-2">

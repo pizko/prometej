@@ -45,7 +45,6 @@
   <main>
     <section class="page-hero">
       <div class="container">
-        <div class="section-kicker">Прометей01</div>
         <h1 class="section-title text-white">Галерея</h1>
       </div>
     </section>
@@ -53,18 +52,30 @@
     
 <section class="section">
   <div class="container">
-    <div class="gallery-grid">
-      <article class="gallery-card"><img class="media-cover" src="assets/images/gallery-1.jpg" alt=""><div class="caption">Монтаж и примеры объектов</div></article>
-      <article class="gallery-card"><img class="media-cover" src="assets/images/gallery-2.jpg" alt=""><div class="caption">Видеонаблюдение и доступ</div></article>
-      <article class="gallery-card"><img class="media-cover" src="assets/images/gallery-3.jpg" alt=""><div class="caption">Реальные рабочие кейсы</div></article>
-      <article class="gallery-card"><img class="media-cover" src="assets/images/gallery-4.jpg" alt=""><div class="caption">Установка оборудования</div></article>
-      <article class="gallery-card"><img class="media-cover" src="assets/images/gallery-5.jpg" alt=""><div class="caption">Домофония и входные группы</div></article>
-      <article class="gallery-card"><img class="media-cover" src="assets/images/gallery-6.jpg" alt=""><div class="caption">Сервис и сопровождение</div></article>
-    </div>
+    <div class="gallery-grid" id="gallery-grid"></div>
   </div>
 </section>
 
   </main>
+
+  <div class="modal fade gallery-lightbox" id="galleryLightbox" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-xl">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2 class="modal-title fs-5 mb-0">Галерея</h2>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+        </div>
+        <div class="modal-body">
+          <img class="gallery-lightbox-image" id="galleryLightboxImage" src="" alt="">
+        </div>
+        <div class="modal-footer justify-content-between">
+          <button class="btn btn-outline-light" type="button" data-gallery-prev>← Предыдущее</button>
+          <div id="galleryLightboxCaption" class="text-center flex-grow-1 px-3"></div>
+          <button class="btn btn-outline-light" type="button" data-gallery-next>Следующее →</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <footer class="footer">
     <div class="container d-flex flex-column flex-md-row justify-content-between gap-2">
