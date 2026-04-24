@@ -2,14 +2,88 @@
 <html lang="ru">
 <head>
   <meta charset="utf-8">
-  <title>Переход в блог</title>
-  <meta http-equiv="refresh" content="0; url=../blog.html">
-  <link rel="canonical" href="../blog.html">
-  <script>
-    window.location.replace("../blog.html");
-  </script>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Блог — Прометей01</title>
+  <meta name="description" content="Новый блог компании Прометей01 вместо старого раздела статей.">
+  <link rel="icon" href="../favicon.ico" sizes="any">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/css/styles.css">
 </head>
 <body>
-  <p>Если переход не выполнился автоматически, откройте <a href="../blog.html">страницу блога</a>.</p>
+  <header class="topbar">
+    <nav class="navbar navbar-expand-xl navbar-dark">
+      <div class="container">
+        <a class="logo-link" href="../index.html">
+          <span class="logo-frame">
+            <img src="../assets/images/logo.png" alt="Прометей01" onerror="this.style.display='none'; this.nextElementSibling.style.display='grid';">
+            <span class="logo-fallback" style="display:none;">01</span>
+          </span>
+          <span class="logo-text">
+            Прометей01
+            <small>Системы безопасности</small>
+          </span>
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Открыть меню">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse justify-content-end" id="mainNav">
+          <ul class="navbar-nav align-items-xl-center gap-xl-1">
+              <li class="nav-item"><a class="nav-link" href="../index.html">Главная</a></li>
+              <li class="nav-item"><a class="nav-link" href="../about.html">О нас</a></li>
+              <li class="nav-item"><a class="nav-link" href="../services.html">Услуги</a></li>
+              <li class="nav-item"><a class="nav-link" href="../contacts.html">Контакты</a></li>
+              <li class="nav-item"><a class="nav-link" href="../gallery.html">Галерея</a></li>
+              <li class="nav-item"><a class="nav-link" href="../products.html">Продукция</a></li>
+              <li class="nav-item"><a class="nav-link" href="../prices.html">Цены</a></li>
+              <li class="nav-item"><a class="nav-link active" href="../blog.html">Блог</a></li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <section class="page-hero">
+      <div class="container">
+        <h1 class="section-title text-white">Блог</h1>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <div class="row g-4">
+          <div class="col-lg-6">
+            <article class="blog-card">
+              <div class="card-body">
+                <div class="section-kicker">Статья</div>
+                <h3>Установка домофонов в Москве</h3>
+                <p>Разбираем, как выбрать домофонную систему, на что смотреть при монтаже и как не получить неудобное решение “на один сезон”.</p>
+                <a class="btn btn-outline-dark" href="article-ustanovka-domofonov-moskva.html">Открыть статью</a>
+              </div>
+            </article>
+          </div>
+          <div class="col-lg-6">
+            <article class="blog-card">
+              <div class="card-body">
+                <div class="section-kicker">Дальше</div>
+                <h3>Блог будет расширяться</h3>
+                <p>На следующем этапе добавим остальные статьи из старой версии и приведём структуру в вид, удобный для будущего WordPress.</p>
+              </div>
+            </article>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container d-flex flex-column flex-md-row justify-content-between gap-2">
+      <div><strong>Прометей01</strong></div>
+      <div>© <span data-year></span> Прометей01</div>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="../assets/js/app.js"></script>
 </body>
 </html>
