@@ -62,10 +62,6 @@ def build_city_page(item: dict) -> str:
   <meta property="og:site_name" content="Прометей01">
   <meta property="og:image" content="{DEFAULT_OG_IMAGE}">
   <meta property="og:image:alt" content="Прометей01 — системы безопасности в {city}">
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="{title} — Прометей01">
-  <meta name="twitter:description" content="{description}">
-  <meta name="twitter:image" content="{DEFAULT_OG_IMAGE}">
   <link rel="icon" href="../../favicon.ico" sizes="any">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="../../assets/css/styles.css">
@@ -249,10 +245,6 @@ def build_cities_index(items: list[dict]) -> str:
   <meta property="og:site_name" content="Прометей01">
   <meta property="og:image" content="{DEFAULT_OG_IMAGE}">
   <meta property="og:image:alt" content="Городские страницы Прометей01">
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Системы безопасности по городам России — Прометей01">
-  <meta name="twitter:description" content="Городские страницы по услугам безопасности для локального поиска и продвижения.">
-  <meta name="twitter:image" content="{DEFAULT_OG_IMAGE}">
   <link rel="icon" href="../favicon.ico" sizes="any">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="../assets/css/styles.css">
