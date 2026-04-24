@@ -8,6 +8,8 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 DATA_PATH = ROOT / "data" / "cities.json"
 CITIES_DIR = ROOT / "cities"
+BASE_URL = "https://prometej01.ru"
+DEFAULT_OG_IMAGE = f"{BASE_URL}/assets/images/fire.jpg"
 
 
 def build_nav(prefix: str, active: str = "") -> str:
@@ -34,6 +36,8 @@ def build_city_page(item: dict) -> str:
     description = escape(item["description"])
     hero_intro = escape(item["hero_intro"])
     lead = escape(item["lead"])
+    slug = escape(item["slug"])
+    canonical_url = f"{BASE_URL}/cities/{slug}/"
 
     service_points = "\n".join(
         f"            <li>{escape(point)}</li>" for point in item["service_points"]
@@ -48,8 +52,20 @@ def build_city_page(item: dict) -> str:
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>{title} — Прометей01</title>
+  <title>{title} | Прометей01</title>
   <meta name="description" content="{description}">
+  <link rel="canonical" href="{canonical_url}">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="{title} — Прометей01">
+  <meta property="og:description" content="{description}">
+  <meta property="og:url" content="{canonical_url}">
+  <meta property="og:site_name" content="Прометей01">
+  <meta property="og:image" content="{DEFAULT_OG_IMAGE}">
+  <meta property="og:image:alt" content="Прометей01 — системы безопасности в {city}">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="{title} — Прометей01">
+  <meta name="twitter:description" content="{description}">
+  <meta name="twitter:image" content="{DEFAULT_OG_IMAGE}">
   <link rel="icon" href="../../favicon.ico" sizes="any">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="../../assets/css/styles.css">
@@ -223,8 +239,20 @@ def build_cities_index(items: list[dict]) -> str:
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Города — Прометей01</title>
-  <meta name="description" content="Городские страницы Прометей01 для локального поиска и услуг по безопасности.">
+  <title>Системы безопасности по городам России | Прометей01</title>
+  <meta name="description" content="Городские страницы Прометей01: системы безопасности, видеонаблюдение, домофоны, СКУД и сигнализация для локального поиска по городам.">
+  <link rel="canonical" href="{BASE_URL}/cities/">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Системы безопасности по городам России — Прометей01">
+  <meta property="og:description" content="Подбор городских страниц по системам безопасности: видеонаблюдение, домофоны, СКУД и сигнализация.">
+  <meta property="og:url" content="{BASE_URL}/cities/">
+  <meta property="og:site_name" content="Прометей01">
+  <meta property="og:image" content="{DEFAULT_OG_IMAGE}">
+  <meta property="og:image:alt" content="Городские страницы Прометей01">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Системы безопасности по городам России — Прометей01">
+  <meta name="twitter:description" content="Городские страницы по услугам безопасности для локального поиска и продвижения.">
+  <meta name="twitter:image" content="{DEFAULT_OG_IMAGE}">
   <link rel="icon" href="../favicon.ico" sizes="any">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="../assets/css/styles.css">
