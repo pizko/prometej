@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+
+Disallow: /send.php
+Disallow: /captcha.php
+Disallow: /thankyou
+
+Sitemap: https://prometej01.ru/sitemap.php
