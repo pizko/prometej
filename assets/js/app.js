@@ -1,4 +1,35 @@
 document.addEventListener("DOMContentLoaded", () => {
+  const setFieldInvalid = (field, invalid) => {
+    if (!field) return;
+    field.classList.toggle("is-invalid", invalid);
+  };
+
+  const clearFormState = (form) => {
+    const feedback = form.querySelector("[data-form-feedback]");
+    if (feedback) {
+      feedback.classList.add("d-none");
+      feedback.classList.remove("alert-danger");
+      feedback.textContent = "";
+    }
+
+    form.querySelectorAll(".is-invalid").forEach((field) => field.classList.remove("is-invalid"));
+  };
+
+  const showFormError = (form, message) => {
+    let feedback = form.querySelector("[data-form-feedback]");
+
+    if (!feedback) {
+      feedback = document.createElement("div");
+      feedback.className = "alert alert-danger";
+      feedback.setAttribute("data-form-feedback", "");
+      form.prepend(feedback);
+    }
+
+    feedback.textContent = message;
+    feedback.classList.remove("d-none");
+    feedback.classList.add("alert-danger");
+  };
+
   const yearNodes = document.querySelectorAll("[data-current-year], [data-year]");
   yearNodes.forEach((node) => {
     node.textContent = String(new Date().getFullYear());
@@ -44,6 +75,62 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
   }
+
+  const leadForms = document.querySelectorAll('form[action="send.php"], form[action$="/send.php"]');
+  leadForms.forEach((form) => {
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      clearFormState(form);
+
+      const submitButton = form.querySelector('button[type="submit"]');
+      if (submitButton) {
+        submitButton.disabled = true;
+      }
+
+      try {
+        const response = await fetch(form.action, {
+          method: "POST",
+          body: new FormData(form),
+          headers: {
+            "X-Requested-With": "XMLHttpRequest",
+          },
+        });
+
+        const result = await response.json().catch(() => null);
+
+        if (!response.ok || !result?.ok) {
+          const errorMessage = result?.error || "Не удалось отправить форму. Попробуйте еще раз.";
+          showFormError(form, errorMessage);
+
+          const captchaField = form.querySelector('input[name="captcha"]');
+          if (/captcha/i.test(errorMessage)) {
+            setFieldInvalid(captchaField, true);
+            captchaField?.focus();
+          }
+
+          const captchaImage = form.querySelector(".captcha-image");
+          if (captchaImage) {
+            const baseUrl =
+              captchaImage.getAttribute("data-base-src") ||
+              captchaImage.getAttribute("src") ||
+              "captcha.php";
+            captchaImage.setAttribute("data-base-src", baseUrl);
+            captchaImage.src = `${baseUrl}${baseUrl.includes("?") ? "&" : "?"}t=${Date.now()}`;
+          }
+
+          return;
+        }
+
+        window.location.href = result.redirect || "/thankyou";
+      } catch (_error) {
+        showFormError(form, "Не удалось отправить форму. Проверьте соединение и попробуйте еще раз.");
+      } finally {
+        if (submitButton) {
+          submitButton.disabled = false;
+        }
+      }
+    });
+  });
 
   const galleryRoot = document.getElementById("gallery-grid");
   if (galleryRoot && window.bootstrap) {

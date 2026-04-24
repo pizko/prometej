@@ -9,7 +9,39 @@ $recipients = [
     'P.s.112@mail.ru',
 ];
 $project = 'Прометей01';
-$successLocation = 'thankyou.html';
+$successLocation = '/thankyou';
+$isAjax = strtolower((string) ($_SERVER['HTTP_X_REQUESTED_WITH'] ?? '')) === 'xmlhttprequest';
+
+function respondError(int $status, string $message, bool $isAjax): void
+{
+    http_response_code($status);
+
+    if ($isAjax) {
+        header('Content-Type: application/json; charset=utf-8');
+        echo json_encode([
+            'ok' => false,
+            'error' => $message,
+        ], JSON_UNESCAPED_UNICODE);
+        exit;
+    }
+
+    exit($message);
+}
+
+function respondSuccess(string $successLocation, bool $isAjax): void
+{
+    if ($isAjax) {
+        header('Content-Type: application/json; charset=utf-8');
+        echo json_encode([
+            'ok' => true,
+            'redirect' => $successLocation,
+        ], JSON_UNESCAPED_UNICODE);
+        exit;
+    }
+
+    header("Location: {$successLocation}");
+    exit;
+}
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     http_response_code(405);
@@ -26,26 +58,22 @@ $formSource = trim((string) ($_POST['form_source'] ?? 'site'));
 $website = trim((string) ($_POST['website'] ?? ''));
 
 if ($website !== '') {
-    http_response_code(400);
-    exit('Spam detected.');
+    respondError(400, 'Spam detected.', $isAjax);
 }
 
 if ($name === '' || $phone === '') {
-    http_response_code(422);
-    exit('Заполните обязательные поля.');
+    respondError(422, 'Заполните обязательные поля.', $isAjax);
 }
 
 if ($consent !== 'yes') {
-    http_response_code(422);
-    exit('Подтвердите согласие на обработку данных.');
+    respondError(422, 'Подтвердите согласие на обработку данных.', $isAjax);
 }
 
 $expectedCaptcha = strtoupper((string) ($_SESSION['prometej_captcha'] ?? ''));
 unset($_SESSION['prometej_captcha']);
 
 if ($expectedCaptcha === '' || $captcha === '' || $captcha !== $expectedCaptcha) {
-    http_response_code(422);
-    exit('Неверно введена CAPTCHA.');
+    respondError(422, 'Неверно введена CAPTCHA.', $isAjax);
 }
 
 $subject = "Новая заявка с сайта — {$project}";
@@ -73,9 +101,7 @@ $headers[] = "Reply-To: {$from}";
 $ok = mail(implode(', ', $recipients), $subject, $message, implode("\r\n", $headers));
 
 if (!$ok) {
-    http_response_code(500);
-    exit('Ошибка при отправке. Попробуйте позже.');
+    respondError(500, 'Ошибка при отправке. Попробуйте позже.', $isAjax);
 }
 
-header("Location: {$successLocation}");
-exit;
+respondSuccess($successLocation, $isAjax);
