@@ -34,7 +34,7 @@ function respondSuccess(string $successLocation, bool $isAjax): void
         header('Content-Type: application/json; charset=utf-8');
         echo json_encode([
             'ok' => true,
-            'redirect' => $successLocation,
+            'message' => 'Ваша заявка отправлена. В ближайшее время мы с вами свяжемся.',
         ], JSON_UNESCAPED_UNICODE);
         exit;
     }

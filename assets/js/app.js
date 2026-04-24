@@ -121,7 +121,29 @@ document.addEventListener("DOMContentLoaded", () => {
           return;
         }
 
-        window.location.href = result.redirect || "/thankyou";
+        let feedback = form.querySelector("[data-form-feedback]");
+        if (!feedback) {
+          feedback = document.createElement("div");
+          feedback.setAttribute("data-form-feedback", "");
+          form.prepend(feedback);
+        }
+
+        feedback.className = "alert alert-success";
+        feedback.textContent =
+          result?.message || "Ваша заявка отправлена. В ближайшее время мы с вами свяжемся.";
+        feedback.classList.remove("d-none");
+
+        form.reset();
+
+        const captchaImage = form.querySelector(".captcha-image");
+        if (captchaImage) {
+          const baseUrl =
+            captchaImage.getAttribute("data-base-src") ||
+            captchaImage.getAttribute("src") ||
+            "captcha.php";
+          captchaImage.setAttribute("data-base-src", baseUrl);
+          captchaImage.src = `${baseUrl}${baseUrl.includes("?") ? "&" : "?"}t=${Date.now()}`;
+        }
       } catch (_error) {
         showFormError(form, "Не удалось отправить форму. Проверьте соединение и попробуйте еще раз.");
       } finally {
