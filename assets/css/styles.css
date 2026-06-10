@@ -534,6 +534,108 @@ a {
   padding-left: 1.2rem;
 }
 
+.breadcrumbs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  margin-bottom: 1.25rem;
+  font-size: 0.95rem;
+  color: rgba(255,255,255,0.78);
+}
+
+.breadcrumbs a {
+  color: #f5f7fb;
+  text-decoration: none;
+}
+
+.breadcrumbs a:hover {
+  text-decoration: underline;
+}
+
+.breadcrumbs span[aria-current="page"] {
+  color: rgba(255,255,255,0.72);
+}
+
+.section .breadcrumbs,
+.surface-card .breadcrumbs {
+  color: var(--muted);
+}
+
+.section .breadcrumbs a,
+.surface-card .breadcrumbs a {
+  color: var(--ink);
+}
+
+.cta-banner {
+  background: linear-gradient(135deg, #101826, #18243a);
+  color: #fff;
+  border-radius: 2rem;
+  padding: 2rem;
+  box-shadow: var(--shadow);
+}
+
+.cta-banner p,
+.cta-banner li {
+  color: rgba(255,255,255,0.82);
+}
+
+.faq-list {
+  display: grid;
+  gap: 1rem;
+}
+
+.faq-item {
+  background: #fff;
+  border-radius: 1.3rem;
+  padding: 1.4rem 1.5rem;
+  box-shadow: var(--shadow-soft);
+}
+
+.faq-item h3 {
+  font-size: 1.1rem;
+  margin-bottom: 0.5rem;
+}
+
+.faq-item p {
+  margin-bottom: 0;
+  color: var(--muted);
+}
+
+.table-wrap {
+  background: #fff;
+  border-radius: 1.6rem;
+  box-shadow: var(--shadow-soft);
+  overflow: hidden;
+}
+
+.table-wrap table {
+  margin-bottom: 0;
+}
+
+.case-card {
+  background: #fff;
+  border-radius: 1.6rem;
+  padding: 1.5rem;
+  box-shadow: var(--shadow-soft);
+  height: 100%;
+}
+
+.case-card img {
+  width: 100%;
+  border-radius: 1rem;
+  margin-bottom: 1rem;
+}
+
+.inline-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+}
+
+.inline-links a {
+  text-decoration: none;
+}
+
 @media (max-width: 1199.98px) {
   .hero-features,
   .metric-strip,

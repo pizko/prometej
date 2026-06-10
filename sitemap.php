@@ -98,7 +98,7 @@ function normalizePublicPath(string $relativePath): ?string
     }
 
     if (str_ends_with($normalized, '.html')) {
-        $normalized = substr($normalized, 0, -5);
+        $normalized = substr($normalized, 0, -5) . '/';
         return preg_replace('#/+#', '/', $normalized);
     }
 

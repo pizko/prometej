@@ -1,16 +1,40 @@
 RewriteEngine On
 
+# Единая версия сайта: HTTPS + без www
+RewriteCond %{HTTPS} !=on [OR]
+RewriteCond %{HTTP_HOST} ^www\.prometej01\.ru$ [NC]
+RewriteRule ^ https://prometej01.ru%{REQUEST_URI} [R=301,L]
+
+# Человекочитаемый sitemap.xml
+RewriteRule ^sitemap\.xml$ sitemap.php [L]
+
+# Старый URL статьи -> новый ЧПУ
+RewriteRule ^blog/article-ustanovka-domofonov-moskva(?:\.html)?$ /blog/ustanovka-domofonov-moskva/ [R=301,L,NC]
+
 # Главная без /index.html
+RewriteCond %{THE_REQUEST} \s/+index\.html[\s?] [NC]
 RewriteRule ^index\.html$ / [R=301,L]
 
 # Внутренние index.html -> папка/
+RewriteCond %{THE_REQUEST} \s/+(.*/)?index\.html[\s?] [NC]
 RewriteRule ^(.*/)?index\.html$ /$1 [R=301,L]
 
-# Если запрошен URL без .html, но такой html-файл существует — отдаем его
+# /page.html -> /page/
+RewriteCond %{THE_REQUEST} \s/+(.+?)\.html[\s?] [NC]
+RewriteRule ^(.+?)\.html$ /$1/ [R=301,L,NE]
+
+# /page -> /page/ если есть соответствующий html-файл
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{DOCUMENT_ROOT}/$1.html -f
+RewriteCond %{THE_REQUEST} \s/+([^.?\s]+)\s [NC]
+RewriteRule ^([^.]+)$ /$1/ [R=301,L]
+
+# Существующие файлы и каталоги не трогаем
+RewriteCond %{REQUEST_FILENAME} -f [OR]
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^ - [L]
+
+# /page/ -> /page.html
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_FILENAME}.html -f
 RewriteRule ^(.+?)/?$ $1.html [L]
-
-# Если пользователь или бот пришел на .html — убираем расширение
-RewriteCond %{THE_REQUEST} \s/+(.+?)\.html[\s?] [NC]
-RewriteRule ^ https://%{HTTP_HOST}/%1 [R=301,L,NE]

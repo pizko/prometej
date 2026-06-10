@@ -1,8 +1,14 @@
 User-agent: *
 Allow: /
 
+Disallow: /wp-admin/
+Allow: /wp-admin/admin-ajax.php
+Disallow: /admin/
+Disallow: /cgi-bin/
+Disallow: /cart/
+Disallow: /search/
 Disallow: /send.php
 Disallow: /captcha.php
 Disallow: /thankyou
 
-Sitemap: https://prometej01.ru/sitemap.php
+Sitemap: https://prometej01.ru/sitemap.xml
