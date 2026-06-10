@@ -31,17 +31,17 @@ def slugify(value: str) -> str:
     return re.sub(r"[^a-z0-9]+", "-", text).strip("-") or "city"
 
 
-def build_nav(prefix: str, active: str = "") -> str:
+def build_nav(active: str = "") -> str:
     items = [
-        ("Главная", f"{prefix}index.html", active == "home"),
-        ("О нас", f"{prefix}about.html", active == "about"),
-        ("Услуги", f"{prefix}services.html", active == "services"),
-        ("Контакты", f"{prefix}contacts.html", active == "contacts"),
-        ("Галерея", f"{prefix}gallery.html", active == "gallery"),
-        ("Продукция", f"{prefix}products.html", active == "products"),
-        ("Цены", f"{prefix}prices.html", active == "prices"),
-        ("Блог", f"{prefix}blog.html", active == "blog"),
-        ("Города", f"{prefix}cities/index.html" if prefix else "cities/index.html", active == "cities"),
+        ("Главная", "/", active == "home"),
+        ("О нас", "/about/", active == "about"),
+        ("Услуги", "/services/", active == "services"),
+        ("Контакты", "/contacts/", active == "contacts"),
+        ("Галерея", "/gallery/", active == "gallery"),
+        ("Продукция", "/products/", active == "products"),
+        ("Цены", "/prices/", active == "prices"),
+        ("Блог", "/blog/", active == "blog"),
+        ("Города", "/cities/", active == "cities"),
     ]
     return "\n".join(
         f'              <li class="nav-item"><a class="nav-link{" active" if is_active else ""}" href="{href}">{label}</a></li>'
@@ -152,17 +152,28 @@ def step_cards() -> str:
 
 def schema_json(item: dict, services: list[dict], canonical_url: str) -> str:
     city = item["city"]
+    city_in = city_where(item)
     faq = build_faq(item)
     payload = {
         "@context": "https://schema.org",
         "@graph": [
             {
-                "@type": "Organization",
+                "@type": "ProfessionalService",
                 "@id": f"{BASE_URL}/#organization",
                 "name": "Прометей01",
-                "url": BASE_URL,
+                "url": f"{BASE_URL}/",
                 "telephone": PHONE,
-                "address": "г. Москва, Ангарская улица, д.6",
+                "address": {
+                    "@type": "PostalAddress",
+                    "addressLocality": "Москва",
+                    "streetAddress": "Ангарская улица, д.6",
+                    "addressCountry": "RU",
+                },
+                "areaServed": [
+                    {"@type": "Country", "name": "Россия"},
+                    {"@type": "City", "name": "Москва"},
+                    {"@type": "AdministrativeArea", "name": "Московская область"},
+                ],
             },
             {
                 "@type": "WebPage",
@@ -174,18 +185,30 @@ def schema_json(item: dict, services: list[dict], canonical_url: str) -> str:
                 "about": {"@id": f"{BASE_URL}/#organization"},
             },
             {
+                "@type": "BreadcrumbList",
+                "@id": f"{canonical_url}#breadcrumbs",
+                "itemListElement": [
+                    {"@type": "ListItem", "position": 1, "name": "Главная", "item": f"{BASE_URL}/"},
+                    {"@type": "ListItem", "position": 2, "name": "Города", "item": f"{BASE_URL}/cities/"},
+                    {"@type": "ListItem", "position": 3, "name": city_in, "item": canonical_url},
+                ],
+            },
+            {
                 "@type": "ItemList",
                 "@id": f"{canonical_url}#services",
-                "name": f"Услуги Прометей01 в {city_where(item)}",
+                "name": f"Услуги Прометей01 в {city_in}",
                 "itemListElement": [
                     {
                         "@type": "ListItem",
                         "position": index + 1,
                         "item": {
                             "@type": "Service",
-                            "name": f"{service['name']} в {city_where(item)}",
+                            "name": f"{service['name']} в {city_in}",
                             "provider": {"@id": f"{BASE_URL}/#organization"},
-                            "areaServed": city,
+                            "areaServed": [
+                                {"@type": "Country", "name": "Россия"},
+                                {"@type": "City", "name": city}
+                            ],
                         },
                     }
                     for index, service in enumerate(services)
@@ -224,26 +247,27 @@ def build_city_page(item: dict, services: list[dict]) -> str:
   <meta name="description" content="{description}">
   <link rel="canonical" href="{canonical_url}">
   <meta property="og:type" content="website">
-  <meta property="og:title" content="{title} — Прометей01">
+  <meta property="og:title" content="{title}">
   <meta property="og:description" content="{description}">
   <meta property="og:url" content="{canonical_url}">
   <meta property="og:site_name" content="Прометей01">
   <meta property="og:image" content="{DEFAULT_OG_IMAGE}">
   <meta property="og:image:alt" content="Прометей01 — системы безопасности в {city_in}">
-  <link rel="icon" href="../../favicon.ico" sizes="any">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" href="/favicon.ico" sizes="any">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="../../assets/css/styles.css">
+  <link rel="stylesheet" href="/assets/css/styles.css">
   <script type="application/ld+json">
 {schema_json(item, services, canonical_url)}
   </script>
 </head>
 <body>
-  <header class="topbar"><nav class="navbar navbar-expand-xl navbar-dark"><div class="container"><a class="logo-link" href="../../index.html"><span class="logo-frame"><img src="../../assets/images/logo.png" alt="Прометей01" onerror="this.style.display='none'; this.nextElementSibling.style.display='grid';"><span class="logo-fallback" style="display:none;">01</span></span><span class="logo-text">Прометей01<small>Системы безопасности</small></span></a><button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Открыть меню"><span class="navbar-toggler-icon"></span></button><div class="collapse navbar-collapse justify-content-end" id="mainNav"><ul class="navbar-nav align-items-xl-center gap-xl-1">
-{build_nav("../../", "cities")}
+  <header class="topbar"><nav class="navbar navbar-expand-xl navbar-dark"><div class="container"><a class="logo-link" href="/"><span class="logo-frame"><img src="/assets/images/logo.png" alt="Прометей01" onerror="this.style.display='none'; this.nextElementSibling.style.display='grid';"><span class="logo-fallback" style="display:none;">01</span></span><span class="logo-text">Прометей01<small>Системы безопасности</small></span></a><button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Открыть меню"><span class="navbar-toggler-icon"></span></button><div class="collapse navbar-collapse justify-content-end" id="mainNav"><ul class="navbar-nav align-items-xl-center gap-xl-1">
+{build_nav("cities")}
   </ul></div></div></nav></header>
 
   <main>
-    <section class="hero"><div class="container"><div class="row align-items-center g-4"><div class="col-lg-7"><h1 class="hero-title">Системы безопасности <span>в {city_in}</span></h1><p class="hero-lead">{hero_intro}</p><div class="hero-actions"><a class="btn btn-accent btn-lg px-4" href="#city-contact-form">Получить расчет</a><a class="btn btn-outline-light btn-lg px-4" href="#city-services">Смотреть услуги</a></div><div class="hero-features"><div class="hero-feature"><img src="../../assets/images/icon-support.webp" alt=""><div><strong>Работаем по России</strong><small>Городские и региональные объекты</small></div></div><div class="hero-feature"><img src="../../assets/images/icon-monitoring.webp" alt=""><div><strong>8 направлений</strong><small>От камер до документации</small></div></div><div class="hero-feature"><img src="../../assets/images/icon-book.webp" alt=""><div><strong>Передача результата</strong><small>ПНР, проверка, документы</small></div></div></div></div><div class="col-lg-5"><div class="hero-visual"><div class="hero-orb"></div><div class="hero-card"><img src="../../assets/images/robot.webp" alt="Прометей01 в {city_in}"></div></div></div></div></div></section>
+    <section class="hero"><div class="container"><nav class="breadcrumbs" aria-label="Хлебные крошки"><a href="/">Главная</a><span>→</span><a href="/cities/">Города</a><span>→</span><span aria-current="page">{city_in}</span></nav><div class="row align-items-center g-4"><div class="col-lg-7"><h1 class="hero-title">Системы безопасности <span>в {city_in}</span></h1><p class="hero-lead">{hero_intro}</p><div class="hero-actions"><a class="btn btn-accent btn-lg px-4" href="#city-contact-form">Получить расчет</a><a class="btn btn-outline-light btn-lg px-4" href="/services/">Смотреть услуги</a></div><div class="hero-features"><div class="hero-feature"><img src="/assets/images/icon-support.webp" alt=""><div><strong>Работаем по России</strong><small>Городские и региональные объекты</small></div></div><div class="hero-feature"><img src="/assets/images/icon-monitoring.webp" alt=""><div><strong>8 направлений</strong><small>От камер до документации</small></div></div><div class="hero-feature"><img src="/assets/images/icon-book.webp" alt=""><div><strong>Передача результата</strong><small>ПНР, проверка, документы</small></div></div></div></div><div class="col-lg-5"><div class="hero-visual"><div class="hero-orb"></div><div class="hero-card"><img src="/assets/images/robot.webp" alt="Прометей01 в {city_in}"></div></div></div></div></div></section>
 
     <section class="section-tight"><div class="container"><div class="metric-strip"><article class="metric-card"><span class="metric-value">15+</span><div>лет в сфере безопасности</div></article><article class="metric-card"><span class="metric-value">8</span><div>направлений работ</div></article><article class="metric-card"><span class="metric-value">300+</span><div>объектов в работе и на сервисе</div></article><article class="metric-card"><span class="metric-value">РФ</span><div>выезды и проекты по России</div></article></div></div></section>
 
@@ -255,18 +279,18 @@ def build_city_page(item: dict, services: list[dict]) -> str:
 {step_cards()}
     </div></div></section>
 
-    <section class="section"><div class="container"><div class="row g-4 align-items-start"><div class="col-lg-7"><div class="surface-card"><div class="section-kicker">Подход</div><h2 class="section-title">Не просто монтаж оборудования, а рабочая система</h2><p class="section-copy">Для объекта в {city_in} важно не только установить камеры, считыватели или кабельные трассы. Система должна быть понятной для эксплуатации, обслуживаемой, согласованной с требованиями объекта и готовой к дальнейшему расширению.</p><ul class="list-check"><li>Подбираем решение под задачи и условия объекта.</li><li>Учитываем кабельные трассы, питание, точки доступа и сценарии безопасности.</li><li>Проводим настройку, проверку и передаем результат без технического хаоса.</li></ul></div></div><div class="col-lg-5"><div class="surface-card overflow-hidden"><img class="media-cover" src="../../assets/images/camera-intro.webp" alt="Системы безопасности в {city_in}"></div></div></div></div></section>
+    <section class="section"><div class="container"><div class="row g-4 align-items-start"><div class="col-lg-7"><div class="surface-card"><div class="section-kicker">Подход</div><h2 class="section-title">Не просто монтаж оборудования, а рабочая система</h2><p class="section-copy">Для объекта в {city_in} важно не только установить камеры, считыватели или кабельные трассы. Система должна быть понятной для эксплуатации, обслуживаемой, согласованной с требованиями объекта и готовой к дальнейшему расширению.</p><ul class="list-check"><li>Подбираем решение под задачи и условия объекта.</li><li>Учитываем кабельные трассы, питание, точки доступа и сценарии безопасности.</li><li>Проводим настройку, проверку и передаем результат без технического хаоса.</li></ul></div></div><div class="col-lg-5"><div class="surface-card overflow-hidden"><img class="media-cover" src="/assets/images/camera-intro.webp" alt="Системы безопасности в {city_in}"></div></div></div></div></section>
 
     <section class="section"><div class="container"><div class="section-kicker">FAQ</div><h2 class="section-title">Частые вопросы по работам в {city_in}</h2><div class="row g-4">
 {faq_cards(faq)}
     </div></div></section>
 
-    <section class="section"><div class="container"><div class="form-shell" id="city-contact-form"><div class="row g-4 align-items-start"><div class="col-lg-5"><div class="section-kicker text-white-50">Заявка</div><h2 class="section-title text-white">Получить расчет по объекту в {city_in}</h2><p class="contact-meta mb-2"><strong>Телефон:</strong><br><a href="tel:{PHONE_HREF}" class="text-white">{PHONE}</a></p><p class="contact-meta mb-0">Оставьте заявку, и мы уточним задачу, сроки, состав работ и формат выезда.</p></div><div class="col-lg-7"><form action="../../send.php" method="post"><input type="hidden" name="form_source" value="Городская страница: {city}"><input type="text" name="website" class="d-none" tabindex="-1" autocomplete="off"><div class="row g-3"><div class="col-md-6"><input class="form-control" name="name" type="text" placeholder="Ваше имя" required></div><div class="col-md-6"><input class="form-control" name="phone" type="tel" placeholder="Телефон *" required></div><div class="col-12"><input class="form-control" name="email" type="email" placeholder="Email"></div><div class="col-12"><textarea class="form-control" name="comment" rows="4" placeholder="Кратко опишите задачу"></textarea></div><div class="col-12"><div class="captcha-box"><div class="captcha-row"><img class="captcha-image" id="city-captcha-image" src="../../captcha.php" data-base-src="../../captcha.php" alt="CAPTCHA"><button class="btn btn-outline-light" type="button" data-captcha-refresh data-captcha-target="city-captcha-image">Обновить код</button></div></div></div><div class="col-12"><input class="form-control" name="captcha" type="text" placeholder="Введите код с картинки" required></div><div class="col-12"><div class="form-check text-white-50"><input class="form-check-input" type="checkbox" id="consent-city" name="consent" value="yes" required><label class="form-check-label" for="consent-city">Я ознакомлен с информированным <a href="../../assets/docs/soglasie.pdf" target="_blank" rel="noopener">согласием</a> и согласен на обработку данных.</label></div></div><div class="col-12 d-flex flex-wrap gap-3 align-items-center"><button class="btn btn-accent btn-lg px-4" type="submit">Получить расчет</button></div></div></form></div></div></div></div></section>
+    <section class="section"><div class="container"><div class="form-shell" id="city-contact-form"><div class="row g-4 align-items-start"><div class="col-lg-5"><div class="section-kicker text-white-50">Заявка</div><h2 class="section-title text-white">Получить расчет по объекту в {city_in}</h2><p class="contact-meta mb-2"><strong>Телефон:</strong><br><a href="tel:{PHONE_HREF}" class="text-white">{PHONE}</a></p><p class="contact-meta mb-0">Оставьте заявку, и мы уточним задачу, сроки, состав работ и формат выезда.</p></div><div class="col-lg-7"><form action="/send.php" method="post"><input type="hidden" name="form_source" value="Городская страница: {city}"><input type="text" name="website" class="d-none" tabindex="-1" autocomplete="off"><div class="row g-3"><div class="col-md-6"><input class="form-control" name="name" type="text" placeholder="Ваше имя" required></div><div class="col-md-6"><input class="form-control" name="phone" type="tel" placeholder="Телефон *" required></div><div class="col-12"><input class="form-control" name="email" type="email" placeholder="Email"></div><div class="col-12"><textarea class="form-control" name="comment" rows="4" placeholder="Кратко опишите задачу"></textarea></div><div class="col-12"><div class="captcha-box"><div class="captcha-row"><img class="captcha-image" id="city-captcha-image" src="/captcha.php" data-base-src="/captcha.php" alt="CAPTCHA"><button class="btn btn-outline-light" type="button" data-captcha-refresh data-captcha-target="city-captcha-image">Обновить код</button></div></div></div><div class="col-12"><input class="form-control" name="captcha" type="text" placeholder="Введите код с картинки" required></div><div class="col-12"><div class="form-check text-white-50"><input class="form-check-input" type="checkbox" id="consent-city" name="consent" value="yes" required><label class="form-check-label" for="consent-city">Я ознакомлен с информированным <a href="/assets/docs/soglasie.pdf" target="_blank" rel="noopener">согласием</a> и согласен на обработку данных.</label></div></div><div class="col-12 d-flex flex-wrap gap-3 align-items-center"><button class="btn btn-accent btn-lg px-4" type="submit">Получить расчет</button></div></div></form></div></div></div></div></section>
   </main>
 
   <footer class="footer"><div class="container d-flex flex-column flex-md-row justify-content-between gap-2"><div><strong>Прометей01</strong></div><div>© <span data-year></span> Прометей01</div></div></footer>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="../../assets/js/app.js"></script>
+  <script src="/assets/js/app.js"></script>
 </body>
 </html>
 """
@@ -293,17 +317,37 @@ def build_cities_index(items: list[dict]) -> str:
   <meta property="og:site_name" content="Прометей01">
   <meta property="og:image" content="{DEFAULT_OG_IMAGE}">
   <meta property="og:image:alt" content="Городские страницы Прометей01">
-  <link rel="icon" href="../favicon.ico" sizes="any">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" href="/favicon.ico" sizes="any">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="../assets/css/styles.css">
+  <link rel="stylesheet" href="/assets/css/styles.css">
+  <script type="application/ld+json">
+  {{
+    "@context": "https://schema.org",
+    "@graph": [
+      {{
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          {{"@type": "ListItem", "position": 1, "name": "Главная", "item": "{BASE_URL}/"}},
+          {{"@type": "ListItem", "position": 2, "name": "Города", "item": "{BASE_URL}/cities/"}}
+        ]
+      }},
+      {{
+        "@type": "CollectionPage",
+        "name": "Системы безопасности по городам России",
+        "url": "{BASE_URL}/cities/"
+      }}
+    ]
+  }}
+  </script>
 </head>
 <body>
-  <header class="topbar"><nav class="navbar navbar-expand-xl navbar-dark"><div class="container"><a class="logo-link" href="../index.html"><span class="logo-frame"><img src="../assets/images/logo.png" alt="Прометей01" onerror="this.style.display='none'; this.nextElementSibling.style.display='grid';"><span class="logo-fallback" style="display:none;">01</span></span><span class="logo-text">Прометей01<small>Системы безопасности</small></span></a><button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Открыть меню"><span class="navbar-toggler-icon"></span></button><div class="collapse navbar-collapse justify-content-end" id="mainNav"><ul class="navbar-nav align-items-xl-center gap-xl-1">
-{build_nav("../", "cities")}
+  <header class="topbar"><nav class="navbar navbar-expand-xl navbar-dark"><div class="container"><a class="logo-link" href="/"><span class="logo-frame"><img src="/assets/images/logo.png" alt="Прометей01" onerror="this.style.display='none'; this.nextElementSibling.style.display='grid';"><span class="logo-fallback" style="display:none;">01</span></span><span class="logo-text">Прометей01<small>Системы безопасности</small></span></a><button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Открыть меню"><span class="navbar-toggler-icon"></span></button><div class="collapse navbar-collapse justify-content-end" id="mainNav"><ul class="navbar-nav align-items-xl-center gap-xl-1">
+{build_nav("cities")}
   </ul></div></div></nav></header>
 
   <main>
-    <section class="hero"><div class="container"><div class="row align-items-center g-4"><div class="col-lg-7"><h1 class="hero-title">Системы безопасности <span>по городам России</span></h1><p class="hero-lead">Проектируем, монтируем и обслуживаем видеонаблюдение, СКУД, слаботочные сети, электромонтаж, пожарную сигнализацию, огнезащиту, ПНР и исполнительную документацию.</p><div class="hero-actions"><a class="btn btn-accent btn-lg px-4" href="#cities-grid">Смотреть города</a><a class="btn btn-outline-light btn-lg px-4" href="../services.html">Услуги</a></div></div><div class="col-lg-5"><div class="hero-visual"><div class="hero-orb"></div><div class="hero-card"><img src="../assets/images/robot.webp" alt="Прометей01"></div></div></div></div></div></section>
+    <section class="hero"><div class="container"><nav class="breadcrumbs" aria-label="Хлебные крошки"><a href="/">Главная</a><span>→</span><span aria-current="page">Города</span></nav><div class="row align-items-center g-4"><div class="col-lg-7"><h1 class="hero-title">Системы безопасности <span>по городам России</span></h1><p class="hero-lead">Проектируем, монтируем и обслуживаем видеонаблюдение, СКУД, слаботочные сети, электромонтаж, пожарную сигнализацию, огнезащиту, ПНР и исполнительную документацию.</p><div class="hero-actions"><a class="btn btn-accent btn-lg px-4" href="#cities-grid">Смотреть города</a><a class="btn btn-outline-light btn-lg px-4" href="/services/">Услуги</a></div></div><div class="col-lg-5"><div class="hero-visual"><div class="hero-orb"></div><div class="hero-card"><img src="/assets/images/robot.webp" alt="Прометей01"></div></div></div></div></div></section>
     <section class="section-tight"><div class="container"><div class="metric-strip"><article class="metric-card"><span class="metric-value">{len(items)}</span><div>городов в разделе</div></article><article class="metric-card"><span class="metric-value">8</span><div>основных направлений</div></article><article class="metric-card"><span class="metric-value">15+</span><div>лет опыта</div></article><article class="metric-card"><span class="metric-value">РФ</span><div>работаем по России</div></article></div></div></section>
     <section class="section" id="cities-grid"><div class="container"><div class="section-kicker">География</div><h2 class="section-title">Выберите город</h2><div class="row g-4">
 {cards}
@@ -312,7 +356,7 @@ def build_cities_index(items: list[dict]) -> str:
 
   <footer class="footer"><div class="container d-flex flex-column flex-md-row justify-content-between gap-2"><div><strong>Прометей01</strong></div><div>© <span data-year></span> Прометей01</div></div></footer>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="../assets/js/app.js"></script>
+  <script src="/assets/js/app.js"></script>
 </body>
 </html>
 """

@@ -9,13 +9,44 @@
   <meta property="og:type" content="website">
   <meta property="og:title" content="О компании Прометей01 — системы безопасности">
   <meta property="og:description" content="Узнайте, как Прометей01 проектирует, монтирует и сопровождает системы безопасности для частных и коммерческих объектов.">
-  <meta property="og:url" content="https://prometej01.ru/about">
+  <meta property="og:url" content="https://prometej01.ru/about/">
   <meta property="og:site_name" content="Прометей01">
   <meta property="og:image" content="https://prometej01.ru/assets/images/camera-intro.webp">
   <meta property="og:image:alt" content="О компании Прометей01">
+  <meta name="twitter:card" content="summary_large_image">
   <link rel="icon" href="/favicon.ico" sizes="any">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="/assets/css/styles.css">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          {"@type": "ListItem", "position": 1, "name": "Главная", "item": "https://prometej01.ru/"},
+          {"@type": "ListItem", "position": 2, "name": "О компании", "item": "https://prometej01.ru/about/"}
+        ]
+      },
+      {
+        "@type": "AboutPage",
+        "name": "О компании Прометей01",
+        "url": "https://prometej01.ru/about/"
+      },
+      {
+        "@type": "ProfessionalService",
+        "name": "Прометей01",
+        "url": "https://prometej01.ru/",
+        "description": "Проектирование, монтаж и обслуживание систем безопасности для частных и коммерческих объектов.",
+        "areaServed": [
+          {"@type": "Country", "name": "Россия"},
+          {"@type": "City", "name": "Москва"},
+          {"@type": "AdministrativeArea", "name": "Московская область"}
+        ]
+      }
+    ]
+  }
+  </script>
 </head>
 <body>
   <header class="topbar">
@@ -36,7 +67,7 @@
         </button>
         <div class="collapse navbar-collapse justify-content-end" id="mainNav">
           <ul class="navbar-nav align-items-xl-center gap-xl-1">
-              <li class="nav-item"><a class="nav-link" href="index.html">Главная</a></li>
+              <li class="nav-item"><a class="nav-link" href="/">Главная</a></li>
               <li class="nav-item"><a class="nav-link active" href="/about/">О нас</a></li>
               <li class="nav-item"><a class="nav-link" href="/services/">Услуги</a></li>
               <li class="nav-item"><a class="nav-link" href="/contacts/">Контакты</a></li>
@@ -53,7 +84,9 @@
   <main>
     <section class="page-hero">
       <div class="container">
+        <nav class="breadcrumbs" aria-label="Хлебные крошки"><a href="/">Главная</a><span>→</span><span aria-current="page">О компании</span></nav>
         <h1 class="section-title text-white">О компании</h1>
+        <p>Прометей01 проектирует, монтирует и сопровождает системы безопасности для частных, коммерческих и производственных объектов.</p>
       </div>
     </section>
 
