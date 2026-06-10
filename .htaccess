@@ -1,10 +1,16 @@
 RewriteEngine On
 
-# Если запрос идет без .html, а файл .html существует — открываем его
+# Главная без /index.html
+RewriteRule ^index\.html$ / [R=301,L]
+
+# Внутренние index.html -> папка/
+RewriteRule ^(.*/)?index\.html$ /$1 [R=301,L]
+
+# Если запрошен URL без .html, но такой html-файл существует — отдаем его
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_FILENAME}.html -f
 RewriteRule ^(.+?)/?$ $1.html [L]
 
-# Редирект со старого URL с .html на новый без .html
+# Если пользователь или бот пришел на .html — убираем расширение
 RewriteCond %{THE_REQUEST} \s/+(.+?)\.html[\s?] [NC]
-RewriteRule ^ %1 [R=301,L]
+RewriteRule ^ https://%{HTTP_HOST}/%1 [R=301,L,NE]
